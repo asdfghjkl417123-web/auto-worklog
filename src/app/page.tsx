@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 /**
- * 子コンポーネントをインポート
- * パスはプロジェクトの構造に合わせて適宜調整してください
+ * 子コンポーネント
+ * プロジェクトの構造に合わせてパスを適宜調整してください
  */
 import AppHeader from "../components/layout/AppHeader";
 import DetailPanel from "../components/layout/DetailPanel";
@@ -14,47 +14,60 @@ export default function Page() {
   /**
    * カレンダーモーダルの開閉状態
    */
-  const [calendarOpen, setCalendarOpen] = useState(false);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   /**
-   * 選択された日付（初期値を今日にする場合は new Date() を入れてもOK）
+   * 選択された日付
+   * 初期値を「今日」に設定することで、DetailPanelが最初からデータを表示できます
    */
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+
+  /**
+   * ハンドラーのメモ化
+   * 不要な再レンダリングを防ぎ、アニメーションの滑らかさを維持します
+   */
+  const openCalendar = useCallback(() => setIsCalendarOpen(true), []);
+  const closeCalendar = useCallback(() => setIsCalendarOpen(false), []);
+
+  const handleDateSelect = useCallback((date: Date) => {
+    setSelectedDate(date);
+    // CalendarPanel 側で 200ms の遅延実行を行っているため、
+    // ここで即座に閉じるとアニメーションが途切れる可能性があります。
+    // そのため、パネルを閉じる制御は CalendarPanel 側の onClose に任せるのがスムーズです。
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 antialiased selection:bg-blue-100">
       
-      {/* アプリヘッダー 
-        z-indexを考慮し、メインコンテンツより上に配置
+      {/* アプリヘッダー
+          z-indexはモーダル(9999)より低く、コンテンツより高い位置に設定
       */}
       <header className="sticky top-0 z-30 w-full">
-        <AppHeader onToggleCalendar={() => setCalendarOpen(true)} />
+        <AppHeader onToggleCalendar={openCalendar} />
       </header>
 
       {/* メインコンテンツエリア 
-        overflow-hidden で画面全体のスクロールを制御しつつ、
-        DetailPanel 内で個別にスクロールさせる構成を想定
+          画面高さいっぱいに広がり、内部でスクロールを制御する構成
       */}
-      <main className="flex-1 flex flex-col p-4 md:p-8 overflow-hidden">
-        <div className="w-full max-w-6xl mx-auto h-full flex flex-col">
-          {/* DetailPanel に選択された日付を渡すことで、
-            その日の詳細を表示できるようになります
+      <main className="flex-1 flex flex-col p-4 md:p-8 overflow-y-auto">
+        <div className="w-full max-w-6xl mx-auto flex-1 flex flex-col">
+          
+          {/* 詳細パネル 
+              選択された日付に基づいた情報を表示
           */}
           <DetailPanel selectedDate={selectedDate} />
+          
         </div>
       </main>
 
       {/* カレンダーパネル（モーダル）
-        createPortal を使用しているため、DOM構造上の配置場所はここでも問題ありません
+          createPortalにより、DOM上は body 直下にレンダリングされます
       */}
       <CalendarPanel
-        open={calendarOpen}
-        onClose={() => setCalendarOpen(false)}
+        open={isCalendarOpen}
+        onClose={closeCalendar}
         selectedDate={selectedDate}
-        onSelectDate={(date) => {
-          setSelectedDate(date);
-          setCalendarOpen(false); // 日付を選んだら自動で閉じる
-        }}
+        onSelectDate={handleDateSelect}
       />
       
     </div>

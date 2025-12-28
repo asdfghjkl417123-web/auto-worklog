@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-type Props = {
+export type DayCellProps = {
   day: number;
   year: number;
   month: number;
@@ -14,7 +14,7 @@ export default function DayCell({
   month,
   selectedDate,
   onSelectDate,
-}: Props) {
+}: DayCellProps) {
   const date = new Date(year, month, day);
   const dayOfWeek = date.getDay();
   const isSunday = dayOfWeek === 0;
@@ -35,29 +35,31 @@ export default function DayCell({
     <motion.button
       onClick={() => onSelectDate(date)}
       initial={false}
-      // ホバー・タップ時のアニメーション（Tailwindクラスと併用）
-      whileTap={{ scale: 0.92 }}
+      whileTap={{ 
+        scale: 1.2,
+        transition: { type: "spring", stiffness: 400, damping: 10 } 
+      }}
       whileHover={{ 
         y: -2,
-        transition: { duration: 0.2 }
+        transition: { duration: 0.1 }
       }}
-      // 今日マークの光るアニメーション
       animate={isToday ? {
         boxShadow: [
-          "0 0 0px rgba(59,130,246,0)",
-          "0 0 12px rgba(59,130,246,0.4)",
-          "0 0 0px rgba(59,130,246,0)"
+          "0 0 6px rgba(59,130,246,0.2)",
+          "0 0 12px rgba(59,130,246,0.3)",
+          "0 0 6px rgba(59,130,246,0.2)"
         ],
       } : {}}
       transition={{ 
-        boxShadow: { repeat: Infinity, duration: 2 },
-        type: "spring", stiffness: 400, damping: 25 
+        boxShadow: { repeat: Infinity, duration: 4, ease: "linear" },
+        type: "spring",
+        stiffness: 300, 
+        damping: 28,
+        mass: 1 
       }}
-      
-      // Tailwind CSS v4 でのスタイリング
       className={`
         relative w-[46px] h-[44px] flex items-center justify-center
-        text-sm rounded-xl cursor-pointer transition-all duration-200
+        text-sm rounded-xl cursor-pointer 
         border-2 antialiased touch-none
         ${isSelected 
           ? "bg-blue-600 text-white border-blue-600 font-bold shadow-md shadow-blue-200 z-10" 
@@ -66,14 +68,13 @@ export default function DayCell({
         ${!isSelected && isSunday ? "text-red-500" : ""}
         ${!isSelected && isSaturday ? "text-blue-500" : ""}
         ${!isSelected && !isSunday && !isSaturday ? "text-slate-700" : ""}
-        ${isToday && !isSelected ? "ring-2 ring-blue-400 ring-offset-2" : ""}
+        ${isToday && !isSelected ? "z-10 ring-2 ring-blue-400 ring-offset-2" : ""}
       `}
     >
       <span className="relative z-10">
         {day}
       </span>
 
-      {/* 今日の場合の下ドット（オプション：数字の横や下に小さなポッチを置くデザイン） */}
       {isToday && (
         <span className={`absolute bottom-1.5 w-1 h-1 rounded-full ${isSelected ? "bg-white" : "bg-blue-500"}`} />
       )}
