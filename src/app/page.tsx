@@ -1,75 +1,66 @@
 "use client";
 
 import { useState, useCallback } from "react";
-
-/**
- * 子コンポーネント
- * プロジェクトの構造に合わせてパスを適宜調整してください
- */
-import AppHeader from "../components/layout/AppHeader";
+import MainLayout from "../components/layout/MainLayout";
 import DetailPanel from "../components/layout/DetailPanel";
-import CalendarPanel from "../components/layout/CalendarPanel";
+import CalendarPanel from "../components/calendar/CalendarPanel";
+import ActivityLogPanel from "../components/timeline/ActivityLogPanel";
+import FocusChartPanel from "../components/layout/FocusChartPanel";
+import type { ActivityBlock } from "../components/timeline/types";
 
 export default function Page() {
-  /**
-   * カレンダーモーダルの開閉状態
-   */
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-
-  /**
-   * 選択された日付
-   * 初期値を「今日」に設定することで、DetailPanelが最初からデータを表示できます
-   */
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [selectedBlock, setSelectedBlock] = useState<ActivityBlock | null>(null);
 
   /**
-   * ハンドラーのメモ化
-   * 不要な再レンダリングを防ぎ、アニメーションの滑らかさを維持します
+   * 日付選択時のハンドラ
+   * DateNavigatorからもCalendarPanelからもこれを使います
    */
-  const openCalendar = useCallback(() => setIsCalendarOpen(true), []);
-  const closeCalendar = useCallback(() => setIsCalendarOpen(false), []);
-
   const handleDateSelect = useCallback((date: Date) => {
     setSelectedDate(date);
-    // CalendarPanel 側で 200ms の遅延実行を行っているため、
-    // ここで即座に閉じるとアニメーションが途切れる可能性があります。
-    // そのため、パネルを閉じる制御は CalendarPanel 側の onClose に任せるのがスムーズです。
+    setSelectedBlock(null); // 日付が変わったら選択解除
+  }, []);
+
+  const handleBlockClick = useCallback((block: ActivityBlock) => {
+    setSelectedBlock((prev) => (prev?.id === block.id ? null : block));
+  }, []);
+
+  const clearBlockSelection = useCallback(() => {
+    setSelectedBlock(null);
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 antialiased selection:bg-blue-100">
-      
-      {/* アプリヘッダー
-          z-indexはモーダル(9999)より低く、コンテンツより高い位置に設定
-      */}
-      <header className="sticky top-0 z-30 w-full">
-        <AppHeader onToggleCalendar={openCalendar} />
-      </header>
+    <MainLayout onOpenCalendar={() => setIsCalendarOpen(true)}>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 h-[calc(100vh-140px)] overflow-hidden p-2">
+        
+        {/* 左側：分析・詳細エリア (7/12) */}
+        <aside className="lg:col-span-7 flex flex-col gap-8 overflow-y-auto pr-2 custom-scrollbar min-h-0">
+          <DetailPanel 
+            selectedDate={selectedDate} 
+            selectedBlock={selectedBlock} 
+          />
+          <FocusChartPanel />
+        </aside>
 
-      {/* メインコンテンツエリア 
-          画面高さいっぱいに広がり、内部でスクロールを制御する構成
-      */}
-      <main className="flex-1 flex flex-col p-4 md:p-8 overflow-y-auto">
-        <div className="w-full max-w-6xl mx-auto flex-1 flex flex-col">
-          
-          {/* 詳細パネル 
-              選択された日付に基づいた情報を表示
-          */}
-          <DetailPanel selectedDate={selectedDate} />
-          
-        </div>
-      </main>
+        {/* 右側：ログエリア (5/12) */}
+        {/* ActivityLogPanel 内で DateNavigator を使うよう、onDateChange を追加 */}
+        <ActivityLogPanel 
+          selectedDate={selectedDate}
+          selectedBlock={selectedBlock}
+          onBlockClick={handleBlockClick}
+          onClearSelection={clearBlockSelection}
+          onDateChange={handleDateSelect} 
+        />
+      </div>
 
-      {/* カレンダーパネル（モーダル）
-          createPortalにより、DOM上は body 直下にレンダリングされます
-      */}
+      {/* モーダル形式のカレンダー（必要に応じて併用） */}
       <CalendarPanel
         open={isCalendarOpen}
-        onClose={closeCalendar}
+        onClose={() => setIsCalendarOpen(false)}
         selectedDate={selectedDate}
         onSelectDate={handleDateSelect}
       />
-      
-    </div>
+    </MainLayout>
   );
 }

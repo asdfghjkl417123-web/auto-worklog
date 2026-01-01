@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import Calendar from "../calendar/Calendar";
+import Calendar from "./Calendar";
 
 type Props = {
   open: boolean;

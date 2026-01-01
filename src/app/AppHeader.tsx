@@ -14,7 +14,7 @@ export default function AppHeader({ onToggleCalendar }: Props) {
             <h1 className="text-xl font-extrabold tracking-tight text-slate-800">
                 Calendar<span className="text-blue-600">App</span>
             </h1>
-
+            
             {/* ボタン：グラデーションとシャドウで立体感を出す */}
             <button
                 onClick={onToggleCalendar}
@@ -25,5 +25,6 @@ export default function AppHeader({ onToggleCalendar }: Props) {
                 日付を選択
             </button>
         </header>
+
     );
 }

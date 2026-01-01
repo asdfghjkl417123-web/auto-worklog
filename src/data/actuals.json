@@ -1,0 +1,82 @@
+[
+  {
+    "id": "log-1767083287",
+    "type": "actual",
+    "start": "2025-12-30T17:28:15.773129",
+    "end": "2025-12-30T17:28:35.783623",
+    "title": "chrome.exe",
+    "meta": "Google Gemini - Google Chrome"
+  },
+  {
+    "id": "log-1767083317",
+    "type": "actual",
+    "start": "2025-12-30T17:28:53.793817",
+    "end": "2025-12-30T17:29:11.803228",
+    "title": "Code.exe",
+    "meta": "ActivityLogPanel.tsx - src - Visual Studio Code"
+  },
+  {
+    "id": "log-1767083353",
+    "type": "actual",
+    "start": "2025-12-30T17:29:17.806422",
+    "end": "2025-12-30T17:29:31.814772",
+    "title": "Code.exe",
+    "meta": "● ActivityLogPanel.tsx - src - Visual Studio Code"
+  },
+  {
+    "id": "log-1767083373",
+    "type": "actual",
+    "start": "2025-12-30T17:29:33.815804",
+    "end": "2025-12-30T17:30:29.849313",
+    "title": "chrome.exe",
+    "meta": "Google Gemini - Google Chrome"
+  },
+  {
+    "id": "log-1767083431",
+    "type": "actual",
+    "start": "2025-12-30T17:30:31.850414",
+    "end": "2025-12-30T17:30:47.859793",
+    "title": "Code.exe",
+    "meta": "types.ts - src - Visual Studio Code"
+  },
+  {
+    "id": "log-1767083449",
+    "type": "actual",
+    "start": "2025-12-30T17:30:49.860896",
+    "end": "2025-12-30T17:31:05.871190",
+    "title": "chrome.exe",
+    "meta": "Google Gemini - Google Chrome"
+  },
+  {
+    "id": "log-1767083467",
+    "type": "actual",
+    "start": "2025-12-30T17:31:07.872327",
+    "end": "2025-12-30T17:31:17.878473",
+    "title": "Code.exe",
+    "meta": "ActivityLogPanel.tsx - src - Visual Studio Code"
+  },
+  {
+    "id": "log-1767083479",
+    "type": "actual",
+    "start": "2025-12-30T17:31:27.884231",
+    "end": "2025-12-30T17:31:47.896556",
+    "title": "Code.exe",
+    "meta": "● ActivityLogPanel.tsx - src - Visual Studio Code"
+  },
+  {
+    "id": "log-1767083509",
+    "type": "actual",
+    "start": "2025-12-30T17:31:49.897625",
+    "end": "2025-12-30T17:32:09.909802",
+    "title": "chrome.exe",
+    "meta": "auto-worklog - Google Chrome"
+  },
+  {
+    "id": "log-1767083531",
+    "type": "actual",
+    "start": "2025-12-30T17:32:11.910883",
+    "end": "2025-12-30T17:32:49.933128",
+    "title": "Code.exe",
+    "meta": "actuals.json - src - Visual Studio Code"
+  }
+]

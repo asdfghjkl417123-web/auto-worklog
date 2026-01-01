@@ -253,7 +253,7 @@ function ActionButton({ onClick, children }: { onClick: () => void, children: Re
       whileHover={{ scale: 1.05, backgroundColor: "#f8fafc", y: -1 }}
       whileTap={{ scale: 0.95 }}
       onClick={onClick}
-      className="px-3.5 py-2 text-[10px] font-black text-slate-500 bg-white rounded-2xl border border-slate-200 transition-all hover:border-blue-200 hover:text-blue-600 shadow-sm whitespace-nowrap uppercase tracking-wider"
+      className="px-3.5 py-2 text-[10px] font-black text-slate-500 bg-white rounded-2xl border border-slate-200 hover:border-blue-200 hover:text-blue-600 shadow-sm whitespace-nowrap uppercase tracking-wider"
     >
       {children}
     </motion.button>
